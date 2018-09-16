@@ -44,6 +44,7 @@ package com.adilshaik.emerency;
         import com.google.android.gms.maps.model.Marker;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.crash.FirebaseCrash;
         import com.google.firebase.database.ChildEventListener;
         import com.google.firebase.database.DataSnapshot;
         import com.google.firebase.database.DatabaseError;
@@ -80,6 +81,11 @@ public class PatientMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private ImageView mDoctorProfileImage;
     private TextView mDoctorName, mDoctorPhone, mDoctorDid;
+
+
+    private Marker mDoctorMarker;
+    private DatabaseReference doctorLocationRef;
+    private ValueEventListener doctorLocationRefListener;
 
 
     @Override
@@ -131,7 +137,7 @@ public class PatientMapActivity extends FragmentActivity implements OnMapReadyCa
                 if (requestBol){
                     requestBol = false;
                     geoQuery.removeAllListeners();
-                    doctorLocationRef.removeEventListener(doctorLocationRefListener);
+//                    doctorLocationRef.removeEventListener(doctorLocationRefListener);
 
 
                     if (doctorFoundID != null){
@@ -187,6 +193,8 @@ public class PatientMapActivity extends FragmentActivity implements OnMapReadyCa
                 return;
             }
         });
+
+        FirebaseCrash.log("Activity created");
     }
     private int radius = 1;
     private Boolean doctorFound = false;
@@ -245,9 +253,7 @@ public class PatientMapActivity extends FragmentActivity implements OnMapReadyCa
             }
         });
     }
-    private Marker mDoctorMarker;
-    private DatabaseReference doctorLocationRef;
-    private ValueEventListener doctorLocationRefListener;
+
     private void getDoctorLocation(){
 
         doctorLocationRef = FirebaseDatabase.getInstance().getReference().child("doctorsWorking").child(doctorFoundID).child("l");
